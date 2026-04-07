@@ -1,6 +1,8 @@
 class Solution {
     int MOD = 1000000007;
     int[][][] dp;
+    static int[] row = {-1, 1, 0, 0};
+    static int[] col = {0, 0, -1, 1};
 
     public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
         dp = new int[m][n][maxMove + 1];
@@ -29,13 +31,16 @@ class Solution {
             return dp[i][j][moves];
         }
 
-        int up = solve(m, n, i - 1, j, moves - 1);
-        int down = solve(m, n, i + 1, j, moves - 1);
-        int left = solve(m, n, i, j - 1, moves - 1);
-        int right = solve(m, n, i, j + 1, moves - 1);
+        int ans = 0;
 
-        dp[i][j][moves] = ((up + down) % MOD + (left + right) % MOD) % MOD;
+        for (int d = 0; d < 4; d++) {
+            int newRow = i + row[d];
+            int newCol = j + col[d];
 
-        return dp[i][j][moves];
+            ans = (ans + solve(m, n, newRow, newCol, moves - 1)) % MOD;
+        }
+
+        dp[i][j][moves] = ans;
+        return ans;
     }
 }
