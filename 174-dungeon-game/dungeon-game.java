@@ -1,44 +1,57 @@
 class Solution {
-    int m, n;
-    int[][] dp;
-
     public int calculateMinimumHP(int[][] dungeon) {
-        m = dungeon.length;
-        n = dungeon[0].length;
-        dp = new int[m][n];
+        int m = dungeon.length;
+        int n = dungeon[0].length;
 
-        for (int[] row : dp) {
-            Arrays.fill(row, -1);
-        }
+        int[][] dp = new int[m][n];
 
-        return solve(0, 0, dungeon);
-    }
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
 
-    public int solve(int i, int j, int[][] dungeon) {
+                if (i == m - 1 && j == n - 1) {
 
+                    if (dungeon[i][j] >= 0) {
+                        dp[i][j] = 1;
+                    } else {
+                        dp[i][j] = -dungeon[i][j] + 1;
+                    }
+                }
 
-        if (i >= m || j >= n) {
-            return (int) 1e9;
-        }
+                else if (i == m - 1) {
+                    int needRight = dp[i][j + 1] - dungeon[i][j];
+                    if (needRight <= 1) {
+                        dp[i][j] = 1;
+                    } else {
+                        dp[i][j] = needRight;
+                    }
+                }
 
-        if (dp[i][j] != -1) {
-            return dp[i][j];
-        }
+                else if (j == n - 1) {
+                    int needDown = dp[i + 1][j] - dungeon[i][j];
+                    if (needDown <= 1) {
+                        dp[i][j] = 1;
+                    } else {
+                        dp[i][j] = needDown;
+                    }
+                }
 
-        if (i == m - 1 && j == n - 1) {
-            if (dungeon[i][j] >= 0) {
-                return dp[i][j] = 1;
+                else {
+                    int next = dp[i + 1][j];
+                    if (dp[i][j + 1] < next) {
+                        next = dp[i][j + 1];
+                    }
+
+                    int need = next - dungeon[i][j];
+
+                    if (need <= 1) {
+                        dp[i][j] = 1;
+                    } else {
+                        dp[i][j] = need;
+                    }
+                }
             }
-            return dp[i][j] = -dungeon[i][j] + 1;
         }
 
-        int needDown = solve(i + 1, j, dungeon);
-        int needRight = solve(i, j + 1, dungeon);
-
-        int need = Math.min(needDown, needRight) - dungeon[i][j];
-
-        if (need <= 0) need = 1;
-
-        return dp[i][j] = need;
+        return dp[0][0];
     }
 }
