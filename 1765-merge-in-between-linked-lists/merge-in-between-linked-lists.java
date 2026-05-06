@@ -1,7 +1,6 @@
 class Solution {
     public ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2) {
 
-        ListNode dummy = list1;
         ListNode prevA = null;
         ListNode endB = null;
 
