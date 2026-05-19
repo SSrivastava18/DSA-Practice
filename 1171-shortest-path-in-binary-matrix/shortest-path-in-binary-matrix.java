@@ -1,6 +1,10 @@
 class Solution {
 
+    static int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
+    static int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
+
     static class Pair {
+
         int r;
         int c;
         int dist;
@@ -14,13 +18,14 @@ class Solution {
 
     public int shortestPathBinaryMatrix(int[][] grid) {
 
-        int n = grid.length;
+        int row = grid.length;
+        int col = grid[0].length;
 
-        if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1) {
+        if (grid[0][0] == 1 || grid[row - 1][col - 1] == 1) {
             return -1;
         }
 
-        boolean[][] vis = new boolean[n][n];
+        boolean[][] vis = new boolean[row][col];
 
         Queue<Pair> q = new LinkedList<>();
 
@@ -36,23 +41,25 @@ class Solution {
             int c = curr.c;
             int dist = curr.dist;
 
-            if (r == n - 1 && c == n - 1) {
+            if (r == row - 1 && c == col - 1) {
                 return dist;
             }
 
-            for (int nr = r - 1; nr <= r + 1; nr++) {
+            for (int k = 0; k < 8; k++) {
 
-                for (int nc = c - 1; nc <= c + 1; nc++) {
+                int nr = r + dr[k];
+                int nc = c + dc[k];
 
-                    if (nr >= 0 && nc >= 0 &&
-                        nr < n && nc < n &&
-                        !vis[nr][nc] &&
-                        grid[nr][nc] == 0) {
+                if (nr >= 0 &&
+                    nc >= 0 &&
+                    nr < row &&
+                    nc < col &&
+                    !vis[nr][nc] &&
+                    grid[nr][nc] == 0) {
 
-                        vis[nr][nc] = true;
+                    vis[nr][nc] = true;
 
-                        q.offer(new Pair(nr, nc, dist + 1));
-                    }
+                    q.offer(new Pair(nr, nc, dist + 1));
                 }
             }
         }
