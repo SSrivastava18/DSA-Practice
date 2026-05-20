@@ -3,25 +3,26 @@ class Solution {
 
         int n = A.length;
 
-        HashSet<Integer> setA = new HashSet<>();
-        HashSet<Integer> setB = new HashSet<>();
-
+        int[] freq = new int[n + 1];
         int[] ans = new int[n];
+
+        int common = 0;
 
         for (int i = 0; i < n; i++) {
 
-            setA.add(A[i]);
-            setB.add(B[i]);
+            freq[A[i]]++;
 
-            int count = 0;
-
-            for (int num : setA) {
-                if (setB.contains(num)) {
-                    count++;
-                }
+            if (freq[A[i]] == 2) {
+                common++;
             }
 
-            ans[i] = count;
+            freq[B[i]]++;
+
+            if (freq[B[i]] == 2) {
+                common++;
+            }
+
+            ans[i] = common;
         }
 
         return ans;
