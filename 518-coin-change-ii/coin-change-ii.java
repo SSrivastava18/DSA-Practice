@@ -2,6 +2,7 @@ class Solution {
     public int change(int amount, int[] coins) {
         Integer[][] dp = new Integer[coins.length][amount + 1];
         return solve(0, amount, coins, dp);
+        
     }
 
     public int solve(int idx, int amount, int[] coins, Integer[][] dp){
@@ -17,7 +18,6 @@ class Solution {
         if(coins[idx] <= amount){
             take = solve(idx, amount - coins[idx], coins, dp);
         }
-
         return dp[idx][amount] = notTake + take;
     }
 }
